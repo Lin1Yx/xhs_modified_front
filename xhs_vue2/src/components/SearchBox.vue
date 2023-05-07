@@ -1,35 +1,7 @@
 <template>
-  <div id="home">
-    <!--放小红书logo-->
-    <el-container>
-
-    <el-aside style="width:180px;">
-      <el-menu>
-         <el-menu-item index="1-1">推荐</el-menu-item>
-          <el-menu-item index="1-1">我的关注</el-menu-item>
-          <el-menu-item index="1-2">美食</el-menu-item>
-          <el-menu-item index="1-3">彩妆</el-menu-item>
-          <el-menu-item index="1-3">穿搭</el-menu-item>
-          <el-menu-item index="1-3">影视</el-menu-item>
-          <el-menu-item index="1-3">职场</el-menu-item>
-          <el-menu-item index="1-3">情感</el-menu-item>
-          <el-menu-item index="1-3">家居</el-menu-item>
-          <el-menu-item index="1-3">游戏</el-menu-item>
-          <el-menu-item index="1-3">旅行</el-menu-item>
-          <el-menu-item index="1-3">健身</el-menu-item>
-      </el-menu>
-    </el-aside>
-
-  <el-container>
-  <el-header>
-    <!--设置搜索栏-->
-    <div>
-      <!--elementui有24分栏，span等于几就占据了几分栏，offset为偏移量，el-col里面得有div分隔才生效-->
+  <div>
       <el-row>
-      <el-col :span="1" :offset="0" class="left">
-        <div><img src="./xhs_logo.png" width="120" height="40" alt="小红书" /></div>
-      </el-col>
-      <el-col :span="16" :offset="3"  class="center">
+      <el-col :span="8" class="center">
         <el-input
           v-model="search"
           @focus="focus"
@@ -37,7 +9,7 @@
           @keyup.enter.native="searchHandler"
           placeholder="搜索感兴趣的内容"
         >
-          <el-button slot="append" icon="el-icon-search" id="search" @click="searchHandler">搜索</el-button>
+          <el-button slot="append" icon="el-icon-search" id="search" @click="searchHandler"></el-button>
         </el-input>
         <!---设置z-index优先级,防止被走马灯效果遮挡-->
         <el-card
@@ -69,36 +41,14 @@
         </el-card>
       </el-col>
     </el-row>
-    
-    </div>
-  </el-header>
-
-  <el-main>
-  <el-row>
-  <el-col :span="3" :offset="0" class="left">
-  <el-button round icon="el-icon-s-home" size="medium" >  发现  </el-button>
-  </el-col>
-  <el-col :span="3" :offset="3" class="left">
-  <el-button round icon="el-icon-circle-plus-outline" size="medium">  发布  </el-button>
-  </el-col>
-  <el-col :span="3" :offset="3" class="left">
-  <el-button round icon="el-icon-tableware" size="medium">  我的  </el-button>
-  </el-col>
-  </el-row>
-  </el-main>
-  
-  </el-container>
-  </el-container>
   </div>
-
 </template>
 
 <script>
-import RandomUtil from "C:/Codelife/demo/xhs_modified_front/xhs_vue2/src/utils/randomUtil";
-import Store from "C:/Codelife/demo/xhs_modified_front/xhs_vue2/src/utils/store";
+import RandomUtil from "c:/Codelife/demo/xhs_modified_front/xhs_vue2/src/utils/randomUtil";
+import Store from "c:/Codelife/demo/xhs_modified_front/xhs_vue2/src/utils/store";
 export default {
-  name: 'HomeView',
-  data() {
+data() {
     return {
       search: "", //当前输入框的值
       isFocus: false, //是否聚焦
@@ -163,30 +113,23 @@ export default {
       return this.isFocus;
     }
   }
-
 }
 </script>
 
 <style>
-#home{
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 0px;
-}
-
 .threeline {
-top: 0ch;
-width: 90px;
-height: 30px;
+width: 210px;
+height: 90px;
+margin-top: -250px;
+padding-top: -50px;
+margin-left: -1050px;
 }
 .left {
-  margin-left: 0px;
-  left: 0cap;
+  margin-left: 200px;
 }
 .center {
+  margin-top: 0px;
+  padding-top: 0px;
   margin-left: 300px;
 }
 #search {
@@ -208,51 +151,6 @@ height: 30px;
   width: 555px;
   height: 300px;
   margin-top: 0px;
-  padding-bottom: 0px;
+  padding-bottom: 20px;
 }
-
-.el-container {
-  height: 100%;
-}
-.el-header{
-  position: absolute;
-    line-height: 50px;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    background-color: #3881ce01;
-    margin-top: 0px;
-}
-
-.el-footer {
-  background-color: #bdbaba0e;
-}
-
-.el-aside {
-  position: absolute;
-    width: 200px;
-    top: 50px;  /* 距离上面50像素 */
-    left: 0px;
-    bottom: 0px;
-    overflow-y: auto; /* 当内容过多时y轴出现滚动条 */
-    background-color: #def3f927;
-
-}
-
-.el-main {
-  position: absolute;
-    top: 50px;
-    left: 200px;
-    bottom: 0px;
-    right: 0px;  /* 距离右边0像素 */
-    padding: 10px;
-    overflow-y: auto; /* 当内容过多时y轴出现滚动条 */
-    /* background-color: red; */
-}
-
-.el-menu {
-  background-color: #d5103bcc;
-}
-
-
 </style>
