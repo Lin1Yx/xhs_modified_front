@@ -2,89 +2,121 @@
   <div id="home">
     <!--放小红书logo-->
     <el-container>
-
+  
     <el-aside style="width:180px;">
-      <el-menu>
-         <el-menu-item index="1-1">推荐</el-menu-item>
-          <el-menu-item index="1-1">我的关注</el-menu-item>
-          <el-menu-item index="1-2">美食</el-menu-item>
-          <el-menu-item index="1-3">彩妆</el-menu-item>
-          <el-menu-item index="1-3">穿搭</el-menu-item>
-          <el-menu-item index="1-3">影视</el-menu-item>
-          <el-menu-item index="1-3">职场</el-menu-item>
-          <el-menu-item index="1-3">情感</el-menu-item>
-          <el-menu-item index="1-3">家居</el-menu-item>
-          <el-menu-item index="1-3">游戏</el-menu-item>
-          <el-menu-item index="1-3">旅行</el-menu-item>
-          <el-menu-item index="1-3">健身</el-menu-item>
+      <!-- 设置当前菜单状态跟路由保持一致 -->
+      <el-menu :default-active="$route.path">
+        <el-menu-item :class="index == number ? 'btn1':'btn'" @click="tab(index)" v-for="(item ,index) in dataList"
+                :key="index">{{item.option}}
+        </el-menu-item>
       </el-menu>
     </el-aside>
 
   <el-container>
   <el-header>
-    <!--设置搜索栏-->
-    <div>
+
+  <div>
       <!--elementui有24分栏，span等于几就占据了几分栏，offset为偏移量，el-col里面得有div分隔才生效-->
       <el-row>
-      <el-col :span="1" :offset="0" class="left">
+
+      <el-col :span="2" :offset="0" class="left">
         <div><img src="./xhs_logo.png" width="120" height="40" alt="小红书" /></div>
       </el-col>
-      <el-col :span="16" :offset="3"  class="center">
-        <el-input
-          v-model="search"
-          @focus="focus"
-          @blur="blur"
-          @keyup.enter.native="searchHandler"
-          placeholder="搜索感兴趣的内容"
-        >
-          <el-button slot="append" icon="el-icon-search" id="search" @click="searchHandler">搜索</el-button>
-        </el-input>
-        <!---设置z-index优先级,防止被走马灯效果遮挡-->
-        <el-card
-          @mouseenter="enterSearchBoxHanlder"
-          v-if="isSearch"
-          class="box-card"
-          id="search-box"
-          style="position:relative;z-index:15"
-        >
-          <dl v-if="isHistorySearch">
-            <dt class="search-title" v-show="history">历史搜索</dt>
-            <dt class="remove-history" v-show="history" @click="removeAllHistory">
-              <i class="el-icon-delete"></i>清空历史记录
-            </dt>
-            <el-tag
-              v-for="search in historySearchList"
-              :key="search.id"
-              closable
-              :type="search.type"
-              @close="closeHandler(search)"
-              style="margin-right:5px; margin-bottom:5px;"
-            >{{search.name}}</el-tag>
-            <dt class="search-title">热门搜索</dt>
-            <dd v-for="search in hotSearchList" :key="search.id">{{search}}</dd>
-          </dl>
-          <dl v-if="isSearchList">
-            <dd v-for="search in searchList" :key="search.id">{{search}}</dd>
-          </dl>
-        </el-card>
+
+       <!--设置搜索栏,组件插入，减少本页代码量-->
+      <el-col :span="8" :offset="2"  class="center">
+        <div> <SearchBox></SearchBox></div>
       </el-col>
-    </el-row>
-    
+     
+    <el-col :span="3" :offset="0" class="left">
+    <el-button round icon="el-icon-s-home" size="medium"  @click="finded"  :plain= "find"  type="danger">  发现  </el-button>
+     </el-col>
+
+     <el-col :span="3" :offset="0" class="left">
+     <el-button round icon="el-icon-circle-plus-outline" size="medium"  @click="post" :plain= "posted"  type="danger">  发布  </el-button>
+     </el-col>
+
+     <el-col :span="3" :offset="0" class="left">
+     <el-button round icon="el-icon-tableware" size="medium"  @click="mine" :plain= "my"  type="danger">  我的  </el-button>
+     </el-col>
+
+     <!-- 弹窗 -->
+     <el-col :span="3" :offset="0" class="left">
+      <!-- 点击button进入外层 -->
+      <el-button size="medium" @click="outerVisible = true" :plain= "my"  type="danger">  登录 </el-button>
+      <el-dialog title="外层 Dialog" :visible.sync="outerVisible">
+      <el-dialog width="30%" title="内层 Dialog" :visible.sync="innerVisible" append-to-body>
+        <!-- 内部dialog的东西放这里 -->
+      </el-dialog>
+      <!-- 外部dialog底部按钮以上的东西放这里 -->
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="outerVisible = false">取 消</el-button>
+      <el-button type="primary" @click="innerVisible = true">打开内层 Dialog</el-button>
+    </div>
+  </el-dialog> 
+    </el-col>
+
+    </el-row>   
     </div>
   </el-header>
 
-  <el-main>
-  <el-row>
-  <el-col :span="3" :offset="0" class="left">
-  <el-button round icon="el-icon-s-home" size="medium" >  发现  </el-button>
-  </el-col>
-  <el-col :span="3" :offset="3" class="left">
-  <el-button round icon="el-icon-circle-plus-outline" size="medium">  发布  </el-button>
-  </el-col>
-  <el-col :span="3" :offset="3" class="left">
-  <el-button round icon="el-icon-tableware" size="medium">  我的  </el-button>
-  </el-col>
-  </el-row>
+  <el-main class="tab">
+  <!-- 11个div可以进行切换，number=0是默认第一个div -->
+
+  <div v-show="number == 0">
+  <!-- 下面的模块是走马灯 -->
+  <div>
+  <el-carousel :interval="4000" type="card" height="300px">
+    <el-carousel-item v-for="item in imgList" :key="item.id">
+      <img :src="item.url" class="image">
+    </el-carousel-item>
+  </el-carousel>
+  </div>
+
+  <!-- 下面的模块是图片三列排布 -->
+  <div style="display: flex" class="average_container">
+      <div v-for="(column, index) in columns" :key="index" >
+        <div v-for="image in column" :key="image.id">
+          <img :src="image.url" >
+        </div>
+      </div>
+  </div>
+
+
+  </div>
+
+  <div v-show="number == 1">
+        <span>C语言：C语言是一门面向过程的、抽象化的通用程序设计语言，广泛应用于底层开发。</span>
+  </div>
+
+  <div v-show="number == 2">
+        <span>JavaScript：是一种具有函数优先的轻量级，解释型或即时编译型的编程语言。</span>
+  </div>
+
+  <div v-show="number == 3">
+        <span>PHP：是在服务器端执行的脚本语言，尤其适用于Web开发并可嵌入HTML中。</span>
+  </div>
+  <div v-show="number == 4">
+        <span>PHP：是在服务器端执行的脚本语言，尤其适用于Web开发并可嵌入HTML中。</span>
+  </div>
+  <div v-show="number == 5">
+        <span>PHP：是在服务器端执行的脚本语言，尤其适用于Web开发并可嵌入HTML中。</span>
+  </div>
+  <div v-show="number == 6">
+        <span>PHP：是在服务器端执行的脚本语言，尤其适用于Web开发并可嵌入HTML中。</span>
+  </div>
+  <div v-show="number == 7">
+        <span>PHP：是在服务器端执行的脚本语言，尤其适用于Web开发并可嵌入HTML中。</span>
+  </div>
+  <div v-show="number == 8">
+        <span>PHP：是在服务器端执行的脚本语言，尤其适用于Web开发并可嵌入HTML中。</span>
+  </div>
+  <div v-show="number == 9">
+        <span>PHP：是在服务器端执行的脚本语言，尤其适用于Web开发并可嵌入HTML中。</span>
+  </div>
+  <div v-show="number == 10">
+        <span>PHP：是在服务器端执行的脚本语言，尤其适用于Web开发并可嵌入HTML中。</span>
+  </div>
   </el-main>
   
   </el-container>
@@ -94,122 +126,148 @@
 </template>
 
 <script>
-import RandomUtil from "C:/Codelife/demo/xhs_modified_front/xhs_vue2/src/utils/randomUtil";
-import Store from "C:/Codelife/demo/xhs_modified_front/xhs_vue2/src/utils/store";
+import axios from "axios";
+import SearchBox from '@/components/SearchBox.vue'
+
 export default {
   name: 'HomeView',
+  components:{
+          SearchBox
+      },
   data() {
     return {
-      search: "", //当前输入框的值
-      isFocus: false, //是否聚焦
-      hotSearchList: ["暂无热门搜索"], //热门搜索数据
-      historySearchList: [], //历史搜索数据
-      searchList: ["暂无数据"], //搜索返回数据,
-      history: false,
-      types: ["", "success", "info", "warning", "danger"] //搜索历史tag式样
+      number:0,//设置菜单的默认选中值
+      find:false,
+      posted:true,
+      my:true,
+      outerVisible: false,
+      innerVisible: false,
+      // dialogVisible:true,
+      dataList: [
+          {option: '推荐'},
+          {option: '我的关注'},
+          {option: '美食'},
+          {option: '彩妆'},
+          {option: '穿搭'},
+          {option: '影视'},
+          {option: '情感'},
+          {option: '职场'},
+          {option: '家居'},
+          {option: '游戏'},
+          {option: '旅行'},
+        ],
+        imgList: [
+                {id:0,url:require('./beauty.jpg')},
+                {id:1,url:require('./2.jpg')},
+                {id:2,url:require('./3.jpg')},
+                {id:3,url:require('./4.jpg')}            
+            ],
+        screenWidth :0,
+        //图片和列
+        images: [],
+        columns: [[], [], []],
     };
+    
   },
-  methods: {
-    focus() {
-      this.isFocus = true;
-      this.historySearchList =
-        Store.loadHistory() == null ? [] : Store.loadHistory();
-      this.history = this.historySearchList.length == 0 ? false : true;
-    },
-    blur() {
-      var self = this;
-      this.searchBoxTimeout = setTimeout(function() {
-        self.isFocus = false;
-      }, 300);
-    },
-    enterSearchBoxHanlder() {
-      clearTimeout(this.searchBoxTimeout);
-    },
-    searchHandler() {
-      //随机生成搜索历史tag式样
-      let n = RandomUtil.getRandomNumber(0, 5);
-      let exist =
-        this.historySearchList.filter(value => {
-          return value.name == this.search;
-        }).length == 0
-          ? false
-          : true;
-      if (!exist) {
-        this.historySearchList.push({ name: this.search, type: this.types[n] });
-        Store.saveHistory(this.historySearchList);
-      }
-      this.history = this.historySearchList.length == 0 ? false : true;
-    },
-    closeHandler(search) {
-      this.historySearchList.splice(this.historySearchList.indexOf(search), 1);
-      Store.saveHistory(this.historySearchList);
-      clearTimeout(this.searchBoxTimeout);
-      if (this.historySearchList.length == 0) {
-        this.history = false;
-      }
-    },
-    removeAllHistory() {
-      Store.removeAllHistory();
-    }
-  },
-  computed: {
-    isHistorySearch() {
-      return this.isFocus && !this.search;
-    },
-    isSearchList() {
-      return this.isFocus && this.search;
-    },
-    isSearch() {
-      return this.isFocus;
-    }
-  }
 
+  methods: {
+  //下面是走马灯图片自适应的第一个函数，通过图片宽度计算高度
+  setSize:function () {
+                // 通过浏览器宽度(图片宽度)计算高度
+                this.bannerHeight = 400 / 1920 * this.screenWidth;
+              },
+    
+    tab(index) {
+        this.number = index;
+        // console.log(index, this.number);
+      },
+    // 即可实现点击按钮的跳转，对应路由里面的path
+    finded(){
+      this.find=false//背景为透明色
+      this.posted=true
+      this.my=true
+      // this.$router.push('/about');可实现跳转页面
+    },
+    post() {
+      this.find=true//背景为透明色
+      this.posted=false
+      this.my=true
+    },
+    mine() {
+      this.find=true
+      this.posted=true
+      this.my=false
+     },  
+     //images先定义为向本地请求的照片的名称，即阿拉伯数字1-10
+    //  fetchImages() {
+    //   this.images=[ 
+    //             {id:0,url:require('./beauty.jpg')},
+    //             {id:1,url:require('./2.jpg')},
+    //             {id:2,url:require('./3.jpg')},
+    //             {id:3,url:require('./4.jpg')} ,
+    //             {id:4,url:require('./beauty.jpg')}
+    //           ];
+    //   this.splitImagesIntoColumns()
+    //   // 向后端发送 GET 请求
+    //   axios.get('/user/userinfo')
+    //     .then(res => {
+    //       console.log(res);
+    //       this.images=[ 
+    //             {id:0,url:require('./beauty.jpg')},
+    //             {id:1,url:require('./2.jpg')},
+    //             {id:2,url:require('./3.jpg')},
+    //             {id:3,url:require('./4.jpg')} ,
+    //             {id:4,url:require('./beauty.jpg')}
+    //           ];
+    //       this.splitImagesIntoColumns()
+    //     })
+    //     .catch(error => {
+    //       console.log(error)
+    //     })
+    // },
+    splitImagesIntoColumns() {
+
+          this.images=[ 
+                {id:0,url:require('./beauty.jpg')},
+                {id:1,url:require('./2.jpg')},
+                {id:2,url:require('./3.jpg')},
+                {id:3,url:require('./4.jpg')} ,
+                {id:4,url:require('./beauty.jpg')}
+              ];
+      let columnCount = 3
+      let imagesPerColumn = Math.ceil(this.images.length / columnCount)
+      for (let i = 0; i < columnCount; i++) {
+        for (let j = 0; j < imagesPerColumn; j++) {
+          let image = this.images[i * imagesPerColumn + j]
+          if (image) {
+            this.columns[i].push(image)
+          }
+        }
+      }
+    }, 
+  },
+  
+  //这个是走马灯的第二个图片自适应的函数
+  mounted() {
+              // 首次加载时,需要调用一次
+              this.screenWidth =  window.innerWidth;
+              this.setSize();
+              // 窗口大小发生改变时,调用一次
+              window.onresize = () =>{
+              this.screenWidth =  window.innerWidth;
+              this.setSize();
+              //首次加载时去请求所有的笔记
+              //this.fetchImages();
+              //this.splitImagesIntoColumns()
+            }
+          },
+          created:function(){
+            this.splitImagesIntoColumns()
+        }
 }
 </script>
 
 <style>
-#home{
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 0px;
-}
-
-.threeline {
-top: 0ch;
-width: 90px;
-height: 30px;
-}
-.left {
-  margin-left: 0px;
-  left: 0cap;
-}
-.center {
-  margin-left: 300px;
-}
-#search {
-  background-color: #e13737;
-  border-radius: 0%;
-}
-.search-title {
-  color: #bdbaba;
-  font-size: 15px;
-  margin-bottom: 5px;
-}
-.remove-history {
-  color: #bdbaba;
-  font-size: 15px;
-  float: right;
-  margin-top: -22px;
-}
-#search-box {
-  width: 555px;
-  height: 300px;
-  margin-top: 0px;
-  padding-bottom: 0px;
-}
 
 .el-container {
   height: 100%;
@@ -251,8 +309,47 @@ height: 30px;
 }
 
 .el-menu {
-  background-color: #d5103bcc;
+  background-color: #e7486bcc;
 }
 
+/*选中时*/
+.btn1 {
+  background-color:#fff !important;
+      color: #ec2929  !important;
+      /* 设置选中时的字体颜色和背景颜色 */
+ }
+
+ /* 走马灯的style设置 */
+ .el-carousel__item h3 {
+      color: #475669;
+      font-size: 14px;
+      opacity: 0.75;
+      line-height: 200px;
+      margin: 0;
+    }
+
+    .el-carousel__item:nth-child(2n) {
+      background-color: #99a9bf;
+    }
+
+    .el-carousel__item:nth-child(2n+1) {
+      background-color: #d3dce6;
+    }
+    img{
+     /*设置图片宽度和浏览器宽度一致*/
+      width:100%;
+      height:inherit;
+    }
+    /* 实现布局三列平分 */
+    .average_container>div{
+    flex: 1;
+    }
+    .average_container div {  
+            border: solid 1px rgba(237, 226, 226, 0.174); 
+            margin-right: calc(80px / 3);
+            box-sizing: border-box;
+            margin-top:20px;
+            margin-bottom:20px;
+    }
 
 </style>

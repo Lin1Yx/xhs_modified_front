@@ -1,7 +1,5 @@
 <template>
   <div>
-      <el-row>
-      <el-col :span="8" class="center">
         <el-input
           v-model="search"
           @focus="focus"
@@ -39,14 +37,13 @@
             <dd v-for="search in searchList" :key="search.id">{{search}}</dd>
           </dl>
         </el-card>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
 <script>
-import RandomUtil from "c:/Codelife/demo/xhs_modified_front/xhs_vue2/src/utils/randomUtil";
-import Store from "c:/Codelife/demo/xhs_modified_front/xhs_vue2/src/utils/store";
+
+import RandomUtil from "@/utils/randomUtil";
+import Store from "@/utils/store";
 export default {
 data() {
     return {
@@ -133,7 +130,7 @@ margin-left: -1050px;
   margin-left: 300px;
 }
 #search {
-  background-color: #e13737;
+  background-color: #f53b3b00;
   border-radius: 0%;
 }
 .search-title {
