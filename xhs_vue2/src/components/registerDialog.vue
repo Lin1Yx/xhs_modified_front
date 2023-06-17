@@ -4,7 +4,8 @@
         title="新用户注册"
         :visible.sync="regVisible"
         width="40%"
-        :before-close="handleClose">
+        :before-close="handleClose"
+        :close-on-click-modal="false">
         <el-form ref="ruleForm" 
         :model="form" 
         label-position="left"
@@ -68,7 +69,7 @@
             <el-input type="password" v-model="form.checkPass" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button @click="regVisible.set()">取 消</el-button>
+            <!-- <el-button @click="regVisible.set()">取 消</el-button> -->
             <el-button type="primary" @click="regVisible.set(false),submitForm('ruleForm')">注 册</el-button>
         </el-form-item>
         </el-form>
@@ -123,6 +124,7 @@ export default{
     props:{
         Visible:{
             type:Boolean,
+            default:false,
         }
     },
     computed:{

@@ -5,6 +5,7 @@
     width="40%"
     :before-close="handleClose"
     :visible.sync="isVisible"
+    :close-on-click-modal="false"
     @submit.prevent="submitlogin">
     <el-form ref="ruleForm" 
         label-position="left"
@@ -110,3 +111,55 @@ export default {
     }
 }
 </script>
+<style>
+.likespan{
+  float:right;
+}
+.senduser{
+  font-size:13px;
+  color:#999;
+}
+.el-card{
+    height: 80%;
+    min-height: 300px;
+  }
+.el-icon-heart {
+  background: url('../assets/heart.jpg') center no-repeat;	
+  font-size: 3rem;
+  width:80%
+}
+.el-icon-solidheart{
+  background: url('../assets/solidheart.jpg') center no-repeat;	
+  font-size: 3rem;
+  width:80%
+}
+
+.el-icon-heart:before {
+  content: "切换";
+  font-size: 3rem; 
+  visibility: hidden;
+}
+.el-icon-solidheart:before {
+  content: "切换";
+  font-size: 3rem; 
+  visibility: hidden;
+}
+ .bottom {
+    margin-top: 10px;
+    line-height: 25px;
+  }
+  .image {
+    width: 100%;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+  
+  .clearfix:after {
+      clear: both
+  }
+</style>
