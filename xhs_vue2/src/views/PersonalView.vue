@@ -117,7 +117,6 @@
                       <el-button type="primary" icon="el-icon-edit" round class="edit" size="small" @click="loginVisible = true">登录</el-button>
                     </el-tab-pane>
                     <el-tab-pane label="收藏" name="second">
-                                            
                     </el-tab-pane>
                     <el-tab-pane label="点赞" name="third">
                      
@@ -136,10 +135,12 @@
 <script>
 import axios from 'axios'
 import loginDialog from "../components/loginDialog.vue"
+// import noteCard from "../components/noteCard.vue"
   export default {
     // 组件引用
     components:{
       loginDialog,
+      // noteCard
     },
     data () {
       var phoneReg = /^[1][3,4,5,7,8][0-9]{9}$/
@@ -190,7 +191,7 @@ import loginDialog from "../components/loginDialog.vue"
           phone: '12345678',
           id:'111',
           sign:'nothing here'
-        },
+        }
       }
     },
     // 传个人资料修改数据给后端
@@ -261,6 +262,13 @@ import loginDialog from "../components/loginDialog.vue"
       },
       updateVisible(){
         this.loginVisible=!this.loginVisible
+      },
+      changelike(){
+        this.card.islike=!this.card.islike;
+        if(this.card.islike)
+          this.card.like+=1;
+        else
+          this.card.like-=1;
       }
   }
 }
@@ -316,6 +324,9 @@ import loginDialog from "../components/loginDialog.vue"
   .el-col {
     border-radius: 0px;
   }
+  .el-row {
+        height: 100%;
+    }
   .row-bg {
     padding: 10px 0;
   }
@@ -335,9 +346,6 @@ import loginDialog from "../components/loginDialog.vue"
   display:inline-block;
   vertical-align: middle;
 }
-/* dialog的圆角设置但是失败了.note {
-  border-radius: 800px;
-} */
 </style>
 
 <style lang="scss" scoped>
